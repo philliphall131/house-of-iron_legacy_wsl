@@ -2,10 +2,14 @@ import './App.css';
 import { useEffect, useReducer } from 'react';
 import { Routes, Route } from "react-router-dom";
 import { AuthContext, StateContext } from './ContextObjs';
+import NavBar from './components/NavBar';
 import HomePage from './pages/HomePage';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
+import Protected from './components/Protected';
+import SignedIn from './components/SignedIn';
 import ironAPI from './utils/ironAPI';
+import LoadingScreen from './components/LoadingScreen';
 
 function App() {
 
@@ -45,7 +49,8 @@ function App() {
       isLoading: true,
       isSignout: false,
       userToken: null,
-      user: null
+      user: null,
+      testUser: null
     }
   );
 
@@ -115,10 +120,12 @@ function App() {
     <div>
       <AuthContext.Provider value={authContext}>
         <StateContext.Provider value={stateContext}>
+          <NavBar />
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<HomePage name={state.testUser}/>}/>
+            <Route path="/signup" element={<SignedIn page={<SignupPage />}/>}/>
+            <Route path="/login" element={<SignedIn page={<LoginPage />}/>}/>
+            <Route path="/protected" element={<Protected page={<HomePage />}/>}/>
           </Routes>
         </StateContext.Provider>
       </AuthContext.Provider>
