@@ -57,3 +57,15 @@ def handle_logout(request):
         return error_on_request(str(e))
     
     return bad_request()
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def check_email(request):
+    try:
+        user = User.objects.filter(email = request.data)
+        if len(user) == 0:
+            return Response({'false'}, status=status.HTTP_200_OK)
+        return Response({'true'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return error_on_request(str(e))

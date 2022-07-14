@@ -1,14 +1,20 @@
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
+import ironAPI from '../utils/ironAPI.js';
+import { useNavigate } from "react-router-dom";
+
 import '../styles/Form.css';
 
 const SignupPage = () => {
+  let navigate = useNavigate();
 
   const validationSchema = yup.object().shape({
     email: yup.string()
       .required('Email is required')
-      .email('Not a valid email'),
+      .email('Not a valid email')
+      .test('checkEmail', 'User with this email already exists',
+        async (value) => (await ironAPI.checkEmail(value))),
     first_name: yup.string()
       .required('First name is required')
       .max(50, 'First name length must be less than 50 characters'),
@@ -31,14 +37,31 @@ const SignupPage = () => {
     password2:''
   };
 
-  const onSubmit = async (values, { setSubmitting })=> {
-    // let response = await AuthAPI.signUp(values)
-    // if (response) {
-    //     props.setUser(response)
-    //     localStorage.setItem('user', JSON.stringify(response))
-    //     navigate('/')
-    //     setSubmitting(false)
-    // }
+  const formatErrors = (errors) => {
+    let returnString = ''
+    for (let i=0; i<errors.length; i++){
+      returnString += errors[i] + "\n"
+    }
+    return returnString
+  }
+
+  const onSubmit = (values, { setSubmitting, setFieldError })=> {
+    let response = ironAPI.signup(values)
+      .then(()=>{
+        navigate("/", { replace: true });
+      }).catch(error=>{
+        let errors = error.response.data
+        let errorFields = Object.keys(errors)
+        for (let i=0; i<errorFields.length; i++){
+          if (Object.keys(initialValues).includes(errorFields[i])){
+            setFieldError(errorFields[i], formatErrors(errors[errorFields[i]]))
+          } else {
+            setFieldError('general', formatErrors(errors[errorFields[i]]))
+          }
+        }
+      }).finally(()=>setSubmitting(false))
+    
+  
   }
 
   return (
@@ -57,7 +80,8 @@ const SignupPage = () => {
         touched 
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
-          <Row className="m-3 justify-content-center">
+          
+            <div className="form-body">
             <Form.Group className="form-inputs" controlId="formEmail">
                 <Form.Label>Email:</Form.Label>
                 <Form.Control 
@@ -136,7 +160,8 @@ const SignupPage = () => {
             <Button className="submit-button mt-2" variant="primary" type="submit" disabled={isSubmitting}>
                 Submit
             </Button>
-          </Row>
+            </div>
+          
         </Form>
       )}
     </Formik>

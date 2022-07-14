@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from .models import *
@@ -21,9 +19,11 @@ class UserViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        token = Token.objects.create(user=serializer.instance)
-        return_data = { 'user': serializer.data, 'token': token.key }
-        return Response(return_data, status=status.HTTP_201_CREATED, headers=headers)
+        #serializer.is_valid(raise_exception=True)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            token = Token.objects.create(user=serializer.instance)
+            return_data = { 'user': serializer.data, 'token': token.key }
+            return Response(return_data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
