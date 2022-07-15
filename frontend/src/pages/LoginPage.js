@@ -1,9 +1,15 @@
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row } from 'react-bootstrap';
 import '../styles/Form.css';
+import ironAPI from '../utils/ironAPI';
+import { StateContext } from '../ContextObjs';
+import { useNavigate } from "react-router-dom";
+import { useContext } from 'react';
 
 const LoginPage = () => {
+  let navigate = useNavigate();
+  const { state, dispatch } = useContext(StateContext);
 
   const validationSchema = yup.object().shape({
     email: yup.string()
@@ -19,14 +25,36 @@ const LoginPage = () => {
     password:'',
   };
 
-  const onSubmit = async (values, { setSubmitting })=> {
-    // let response = await AuthAPI.signUp(values)
-    // if (response) {
-    //     props.setUser(response)
-    //     localStorage.setItem('user', JSON.stringify(response))
-    //     navigate('/')
-    //     setSubmitting(false)
-    // }
+  const formatErrors = (errors) => {
+    let returnString = ''
+    for (let i=0; i<errors.length; i++){
+      returnString += errors[i] + "\n"
+    }
+    return returnString
+  }
+
+  const onSubmit = async (values, { setSubmitting, setFieldError })=> {
+    ironAPI.login(values)
+      .then((response)=>{
+        console.log(response)
+        dispatch({ type: 'SIGN_IN', data: response.data });
+        navigate("/dashboard", { replace: true });
+      })
+      .catch(error=>{
+        let errors = error.response.data
+        let errorFields = Object.keys(errors)
+        for (let i=0; i<errorFields.length; i++){
+          if (Object.keys(initialValues).includes(errorFields[i])){
+            setFieldError(errorFields[i], formatErrors(errors[errorFields[i]]))
+          } else {
+            setFieldError('general', formatErrors(errors[errorFields[i]]))
+          }
+        }
+        setSubmitting(false)
+      })
+      .finally(()=>{
+        setSubmitting(false)
+      })
   }
 
   return (

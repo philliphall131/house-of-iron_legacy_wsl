@@ -1,13 +1,15 @@
+import { useContext } from 'react';
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import ironAPI from '../utils/ironAPI.js';
 import { useNavigate } from "react-router-dom";
-
+import { StateContext } from '../ContextObjs';
 import '../styles/Form.css';
 
 const SignupPage = () => {
   let navigate = useNavigate();
+  const { state, dispatch } = useContext(StateContext);
 
   const validationSchema = yup.object().shape({
     email: yup.string()
@@ -46,10 +48,12 @@ const SignupPage = () => {
   }
 
   const onSubmit = (values, { setSubmitting, setFieldError })=> {
-    let response = ironAPI.signup(values)
-      .then(()=>{
-        navigate("/", { replace: true });
-      }).catch(error=>{
+    ironAPI.signup(values)
+      .then((response)=>{
+        dispatch({ type: 'SIGN_IN', data: response.data });
+        navigate("/dashboard", { replace: true });
+      })
+      .catch(error=>{
         let errors = error.response.data
         let errorFields = Object.keys(errors)
         for (let i=0; i<errorFields.length; i++){
@@ -59,9 +63,11 @@ const SignupPage = () => {
             setFieldError('general', formatErrors(errors[errorFields[i]]))
           }
         }
-      }).finally(()=>setSubmitting(false))
-    
-  
+        setSubmitting(false)
+      })
+      .finally(()=>{
+        setSubmitting(false)
+      })
   }
 
   return (
@@ -157,9 +163,9 @@ const SignupPage = () => {
                     {errors.password2}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Button className="submit-button mt-2" variant="primary" type="submit" disabled={isSubmitting}>
+             <button className="submit-button mt-2" type="submit" disabled={isSubmitting}> 
                 Submit
-            </Button>
+            </button>
             </div>
           
         </Form>

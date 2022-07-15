@@ -1,8 +1,9 @@
 import './styles/App.css';
 import { useEffect, useReducer } from 'react';
 import { Routes, Route } from "react-router-dom";
-import { AuthContext, StateContext } from './ContextObjs';
+import { StateContext } from './ContextObjs';
 import NavBar from './components/NavBar';
+import LoadingScreen from './components/LoadingScreen';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import SignupPage from './pages/SignupPage';
@@ -35,8 +36,8 @@ function App() {
           };
         case 'SIGN_OUT':
           // reset token to null
-          localStorage.setItem("userToken", null);
-          localStorage.setItem("userId", null);
+          localStorage.removeItem("userToken");
+          localStorage.removeItem("userId", null);
           return {
             ...prevState,
             isSignout: true,
@@ -62,14 +63,15 @@ function App() {
       let data = { user: null, token: null };
       try {
         // Restore token
-        userId = sessionStorage.getItem('userId')
-        userToken = sessionStorage.getItem("userToken");
+        userId = localStorage.getItem('userId')
+        userToken = localStorage.getItem("userToken");
       } catch (e) {
         console.log('Error retrieving token')
       }
       // If a token was retrieved, validate Token, get user info
       if (userId && userToken){
         let userResponse = await ironAPI.getUser(userId, userToken)
+        console.log('userResponse', userResponse)
         if (userResponse && userResponse.data){
           data = { user: userResponse.data, token: userToken }
         } else {
@@ -81,54 +83,28 @@ function App() {
     bootstrapAsync();
   }, []);
 
-  const authContext = {
-    signIn: async (data) => {
-      // get a token (and handle errors)
-      let response = await ironAPI.login(data)
-      if (response){
-        if (response.error) {
-          alert(`${response.error}: Invalid login credentials`)
-          return
-        } else if (response.data && response.data.token && response.data.user) {
-          // add the token to state
-          dispatch({ type: 'SIGN_IN', data: response.data });
-          return
-        } else {
-          alert('Error with login response, contact site admin')
-          return
-        }
-      }
-      alert('Error with login request, contact site admin')
-    },
-    signOut: () => dispatch({ type: 'SIGN_OUT' }),
-    signUp: async (data) => {
-      // In a production app, we need to send user data to server and get a token
-      // We will also need to handle errors if sign up failed
-      // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
-      // In the example, we'll use a dummy token
-
-      dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-    },
-  };
-
   const stateContext = {
     'state': state,
     'dispatch': dispatch
   }
 
+  if (state.isLoading) {
+    return (
+      <LoadingScreen />
+    )
+  }
+
   return (
     <div>
-      <AuthContext.Provider value={authContext}>
-        <StateContext.Provider value={stateContext}>
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<LandingPage name={state.testUser}/>}/>
-            <Route path="/signup" element={<SignedIn page={<SignupPage />}/>}/>
-            <Route path="/login" element={<SignedIn page={<LoginPage />}/>}/>
-            <Route path="/dashboard" element={<Protected page={<Dashboard />}/>}/>
-          </Routes>
-        </StateContext.Provider>
-      </AuthContext.Provider>
+      <StateContext.Provider value={stateContext}>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<LandingPage name={state.testUser}/>}/>
+          <Route path="/signup" element={<SignedIn page={<SignupPage />}/>}/>
+          <Route path="/login" element={<SignedIn page={<LoginPage />}/>}/>
+          <Route path="/dashboard" element={<Protected page={<Dashboard />}/>}/>
+        </Routes>
+      </StateContext.Provider>
     </div>
   );
 }

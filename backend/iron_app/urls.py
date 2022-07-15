@@ -9,6 +9,5 @@ r.register('users', UserViewSet, basename='user')
 urlpatterns = [
     path("", include(r.urls)),
     path('token-auth/', obtain_auth_token, name='token-auth'),
-    path('check-email/', check_email)
     # path('reset_password/', handle_reset),
 ]

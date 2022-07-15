@@ -8,7 +8,7 @@ const Dashboard = ({name}) => {
     <div className="standard-body">
       <div className="main-content">
         <h1>Dashboard</h1>
-        <p>{state.user.first_name}</p>
+        <p>{state.user.id}</p>
       </div>
     </div>
   )

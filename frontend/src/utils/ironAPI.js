@@ -25,7 +25,7 @@ const options = (token=null) => {
 const ironAPI = {}
 
 ironAPI.login = async (loginData) => {
-    return await axios.post(`${BASE_URL}/login/`, loginData, options())
+    return await axios.post(`${BASE_URL}/users/login/`, loginData, options())
 };
 
 ironAPI.signup = async (signupData) => {
@@ -33,9 +33,9 @@ ironAPI.signup = async (signupData) => {
 };
 
 ironAPI.checkEmail = async (email) => {
-    let response = await axios.post(`${BASE_URL}/check-email/`, email, options())
+    let response = await axios.post(`${BASE_URL}/users/check_email/`, {'email': email}, options())
     if (response && response.data){
-        if (response.data == 'true') { return false }
+        if (response.data.user_exists === 'true') { return false }
     }
     return true
 };

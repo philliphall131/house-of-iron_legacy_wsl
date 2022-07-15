@@ -36,6 +36,15 @@
 .my-nav-item {
     padding: 4px;
     margin:4px;
+    color: white;
+}
+.my-nav-item:hover {
+    border: 1px solid #7b8a34;
+    border-radius: 5px;
+}
+.my-nav-item:active {
+    background-color: #7b8a34;
+    border-radius: 5px;
 }
 
 .right-item {
