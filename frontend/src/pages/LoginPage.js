@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { Form, Button, Row } from 'react-bootstrap';
+import { Form, Row } from 'react-bootstrap';
 import '../styles/Form.css';
 import ironAPI from '../utils/ironAPI';
 import { StateContext } from '../ContextObjs';
@@ -9,7 +9,7 @@ import { useContext } from 'react';
 
 const LoginPage = () => {
   let navigate = useNavigate();
-  const { state, dispatch } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
 
   const validationSchema = yup.object().shape({
     email: yup.string()
@@ -25,32 +25,15 @@ const LoginPage = () => {
     password:'',
   };
 
-  const formatErrors = (errors) => {
-    let returnString = ''
-    for (let i=0; i<errors.length; i++){
-      returnString += errors[i] + "\n"
-    }
-    return returnString
-  }
-
   const onSubmit = async (values, { setSubmitting, setFieldError })=> {
     ironAPI.login(values)
       .then((response)=>{
-        console.log(response)
+        console.log('good', response)
         dispatch({ type: 'SIGN_IN', data: response.data });
         navigate("/dashboard", { replace: true });
       })
       .catch(error=>{
-        let errors = error.response.data
-        let errorFields = Object.keys(errors)
-        for (let i=0; i<errorFields.length; i++){
-          if (Object.keys(initialValues).includes(errorFields[i])){
-            setFieldError(errorFields[i], formatErrors(errors[errorFields[i]]))
-          } else {
-            setFieldError('general', formatErrors(errors[errorFields[i]]))
-          }
-        }
-        setSubmitting(false)
+        setFieldError('general', error.response.data.error)
       })
       .finally(()=>{
         setSubmitting(false)
@@ -73,7 +56,7 @@ const LoginPage = () => {
         touched 
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
-          <Row className="m-3 justify-content-center">
+          <div className="form-body">
             <Form.Group className="form-inputs" controlId="formEmail">
                 <Form.Label>Email:</Form.Label>
                 <Form.Control 
@@ -104,10 +87,11 @@ const LoginPage = () => {
                     {errors.password}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Button className="submit-button mt-2" variant="primary" type="submit" disabled={isSubmitting}>
+            <button className="submit-button mt-2" type="submit" disabled={isSubmitting}>
                 Submit
-            </Button>
-          </Row>
+            </button>
+            <div className="general-error">{errors.general}</div>
+          </div>
         </Form>
       )}
     </Formik>

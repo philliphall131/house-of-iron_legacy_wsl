@@ -21,8 +21,8 @@
   color: #fff;
   cursor: pointer;
   display: inline-flex;
-  font-family: "JetBrains Mono",monospace;
   height: 48px;
+  width: 200px !important;
   justify-content: center;
   line-height: 1;
   list-style: none;
@@ -49,4 +49,9 @@
 .submit-button:active {
   box-shadow: #818633 0 3px 7px inset;
   transform: translateY(2px);
+}
+
+.general-error {
+  color: red;
+  text-align: center;
 }

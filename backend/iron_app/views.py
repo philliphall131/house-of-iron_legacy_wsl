@@ -58,7 +58,7 @@ class UserViewSet(ModelViewSet):
                 }
                 return Response(data, status=status.HTTP_202_ACCEPTED)
             else:
-                return Response({'error': 'Invalid credentials'})
+                return Response({'error': 'Email and password combination not recognized'}, status=status.HTTP_403_FORBIDDEN)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

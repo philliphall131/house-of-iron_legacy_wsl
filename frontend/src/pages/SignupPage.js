@@ -86,7 +86,6 @@ const SignupPage = () => {
         touched 
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
-          
             <div className="form-body">
             <Form.Group className="form-inputs" controlId="formEmail">
                 <Form.Label>Email:</Form.Label>
@@ -167,7 +166,6 @@ const SignupPage = () => {
                 Submit
             </button>
             </div>
-          
         </Form>
       )}
     </Formik>

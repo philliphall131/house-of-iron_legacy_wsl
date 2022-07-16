@@ -19,9 +19,11 @@ const NavBar = () => {
                 Dashboard
               </div>
             </Link>
-            <div className="my-nav-item right-item">
-              <div className="my-nav-link" onClick={() => dispatch({ type: 'SIGN_OUT' })}>Logout</div>
-            </div>
+            <Link className="my-nav-link" to="/login">
+              <div className="my-nav-link right-item" onClick={() => dispatch({ type: 'SIGN_OUT' })}>
+                Logout
+              </div>
+            </Link>
           </> :
           <>
             <Link className="my-nav-link" to="/signup">

@@ -32,6 +32,9 @@
 .brand-text {
     font-weight: 800;
 }
+.brand-text:hover {
+    color: #7b8a34;
+}
 
 .my-nav-item {
     padding: 4px;
@@ -39,8 +42,7 @@
     color: white;
 }
 .my-nav-item:hover {
-    border: 1px solid #7b8a34;
-    border-radius: 5px;
+    color: #7b8a34
 }
 .my-nav-item:active {
     background-color: #7b8a34;
@@ -50,3 +52,4 @@
 .right-item {
     margin-right: 10px;
 }
+
