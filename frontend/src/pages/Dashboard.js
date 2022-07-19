@@ -19,8 +19,8 @@ const Dashboard = () => {
     <div className="dash-body">
       <div className="dash-content">
         <h1 className="dash-title">HAVE YOU LIFTED TODAY, {state.user.first_name}?</h1>
-        <Link to="/dashboard">
-          <button className="dash-button">Workout Schedule</button>
+        <Link to="/program">
+          <button className="dash-button">Workout</button>
         </Link>
         <Link to="/dashboard">
           <button className="dash-button">Create/Edit Programs</button>

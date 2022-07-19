@@ -1,0 +1,47 @@
+# Each Program has a schedule of days
+# Each day has a Workout (or none)
+# Each Workout has Sections (group of lifts)
+# Each Section has Lift(s)
+# Each Lift has a movement and sets/reps/time
+user
+--
+id
+info
+
+Program
+--
+id
+name
+duration
+
+Workout
+--
+id
+program FK >- Program.id
+day
+
+Section
+--
+id
+workout FK >- Workout.id
+
+Lifts
+--
+id
+section FK >- Section.id
+movement FK >- UserMovements.id
+Sets
+Reps
+Time
+
+UserMovements
+--
+id
+user FK >- user.id
+movment FK >- Movements.id
+weight_history
+
+Movements
+--
+id
+name

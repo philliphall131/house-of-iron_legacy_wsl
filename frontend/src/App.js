@@ -11,6 +11,8 @@ import LoginPage from './pages/LoginPage';
 import Protected from './components/Protected';
 import SignedIn from './components/SignedIn';
 import ironAPI from './utils/ironAPI';
+import ProgramPage from './pages/ProgramPage';
+import WorkoutPage from './pages/WorkoutPage';
 
 function App() {
 
@@ -103,6 +105,8 @@ function App() {
           <Route path="/signup" element={<SignedIn page={<SignupPage />}/>}/>
           <Route path="/login" element={<SignedIn page={<LoginPage />}/>}/>
           <Route path="/dashboard" element={<Protected page={<Dashboard />}/>}/>
+          <Route path="/program" element={<Protected page={<ProgramPage />}/>}/>
+          <Route path="/program/workout" element={<Protected page={<WorkoutPage />}/>}/>
         </Routes>
       </StateContext.Provider>
     </div>

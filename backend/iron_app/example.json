@@ -1,0 +1,62 @@
+{
+    "id":0,
+    "name": "Hero Program",
+    "active":"false",
+    "start_date":null,
+    "duration": 6,
+    "template":{
+        "mon":"Squat/Bench",
+        "tue":"Run",
+        "wed":"Deadlift/Back",
+        "thu":"Run",
+        "fri":"Power/Arms",
+        "sat":"Stretch",
+        "sun":null
+    },
+    "schedule":[
+        {
+            "id":0,
+            "template_day":"mon",
+            "completed":false,
+            "sections":[
+                {
+                    "id":0,
+                    "name":"Warm Up",
+                    "lifts":[
+                        {
+                            "id":0,
+                            "movement": "Jog",
+                            "reps_or_time":"time",
+                            "planned_sets":[[5,0]],
+                            "completed_sets":[null]
+                        }
+                        
+                    ]
+                },
+                {
+                    "id":1,
+                    "name":"Main Lift",
+                    "lifts":[
+                        {
+                            "id":1,
+                            "movement":"Squat",
+                            "movement_instructions":"Do squats",
+                            "reps_or_time":"reps",
+                            "planned_sets":[5,5,5,5,5],
+                            "completed_sets":[null, null, null, null, null]
+                        },
+                        {
+                            "id":2,
+                            "movement":"Crunches",
+                            "movement_instructions":"Do crunches",
+                            "reps_or_time":"reps",
+                            "planned_sets":[5,5,5,5,5],
+                            "completed_sets":[null, null, null, null, null]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+
+}

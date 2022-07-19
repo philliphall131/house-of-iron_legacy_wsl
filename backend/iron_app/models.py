@@ -11,3 +11,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+class Program (models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    duration = models.IntegerField()
+
+class Lift(models.Model):
+    pass
