@@ -15,7 +15,7 @@ const ProgramPage = () => {
             <div className="program-day">Day<br/>{`${num}`}</div>
             <div className="vr"></div>
             <div className="program-workout">
-              <div>{`Workout 1-${num}`}<br/>4 Sections</div> 
+              <div>{`Workout 1-${num}`}<br/>Type: Squat/Bench</div> 
             </div>
             <div className="vr"></div>
             <div  className="program-day-complete">

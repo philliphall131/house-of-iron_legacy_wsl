@@ -13,6 +13,7 @@ import SignedIn from './components/SignedIn';
 import ironAPI from './utils/ironAPI';
 import ProgramPage from './pages/ProgramPage';
 import WorkoutPage from './pages/WorkoutPage';
+import NewProgramPage from './pages/NewProgramPage';
 
 function App() {
 
@@ -73,7 +74,6 @@ function App() {
       // If a token was retrieved, validate Token, get user info
       if (userId && userToken){
         let userResponse = await ironAPI.getUser(userId, userToken)
-        console.log('userResponse', userResponse)
         if (userResponse && userResponse.data){
           data = { user: userResponse.data, token: userToken }
         } else {
@@ -106,6 +106,7 @@ function App() {
           <Route path="/login" element={<SignedIn page={<LoginPage />}/>}/>
           <Route path="/dashboard" element={<Protected page={<Dashboard />}/>}/>
           <Route path="/program" element={<Protected page={<ProgramPage />}/>}/>
+          <Route path="/program/new" element={<Protected page={<NewProgramPage />}/>}/>
           <Route path="/program/workout" element={<Protected page={<WorkoutPage />}/>}/>
         </Routes>
       </StateContext.Provider>

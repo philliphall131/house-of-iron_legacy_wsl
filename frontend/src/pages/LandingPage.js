@@ -10,7 +10,7 @@ const LandingPage = ({name}) => {
     <div className="standard-body">
       <div className="main-content">
       <img src={splash} />
-        { !state.user &&
+        { !state.user ?
           <div className='landing-buttons'>
             <Link to={'signup'}>
               <button className="landing-button">Sign Up Page</button>
@@ -18,9 +18,14 @@ const LandingPage = ({name}) => {
             <Link to={'login'}>
               <button className="landing-button">Login Page</button>
             </Link>
-          </div>
+          </div> :
+          <div className='landing-buttons'>
+            <h2>Welcome {state.user.first_name}<br/>You're already logged in</h2>
+            <Link to={'dashboard'}>
+              <button className="landing-button">My Dashboard</button>
+            </Link>
+        </div>
         }
-
       </div>
     </div>
   )
